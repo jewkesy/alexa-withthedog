@@ -1,5 +1,1 @@
-woofIntent woof
-woofIntent bark
-woofIntent yap
-woofIntent grrrr
-woofIntent growl
+AMAZON.StopIntent stop
