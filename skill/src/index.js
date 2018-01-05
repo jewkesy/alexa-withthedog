@@ -73,12 +73,14 @@ function onIntent(intentRequest, session, callback) { // Called when the user sp
 function stop(intent, session, callback) {
   var sessionAttributes = session.attributes;
   sessionAttributes = {};
-  var text = "Goodbye";
+  var text = "Walkies!";
   // sessionAttributes.intent = intent;
   callback(sessionAttributes, skillHelper.buildSpeechletResponse(text, text, "", true, false));
 }
 
 function invalidAnswer(intent, session, callback) {
+  return sayWoof(session.user.userId, callback);
+
   var sessionAttributes = session.attributes;
   sessionAttributes.intent = intent;
 
