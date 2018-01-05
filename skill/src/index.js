@@ -96,7 +96,7 @@ function processHelp(intent, session, callback) {
   var sessionAttributes = session.attributes;
   sessionAttributes.intent = intent;
   
-  var text = "Woof";
+  var text = "I'll keep playing with your dog until you tell me to stop";
   var title = "Help";
   
   var speechlet = skillHelper.buildSpeechletResponse(title, text, sessionAttributes.repromptText, false, false);
