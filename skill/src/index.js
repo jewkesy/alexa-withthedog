@@ -42,7 +42,8 @@ function onSessionEnded(sessionEndedRequest, session) { // Called when the user 
 
 function onLaunch(launchRequest, session, callback) { // Called when the user launches the app without specifying what they want.
   console.log("onLaunch requestId=" + launchRequest.requestId + ", sessionId=" + session.sessionId);
-  sayWoof(session.user.userId, callback);
+  session.locale = launchRequest.locale;
+  sayWoof(session, callback);
 }
 
 function onIntent(intentRequest, session, callback) { // Called when the user specifies an intent for this application.
@@ -60,10 +61,10 @@ function onIntent(intentRequest, session, callback) { // Called when the user sp
       return processHelp(intentName, session, callback);
     case "AMAZON.YesIntent":
     case "AMAZON.NoIntent":
-      if ( JSON.stringify(session.attributes) === JSON.stringify({})) return sayWoof(session.user.userId, callback);
+      if ( JSON.stringify(session.attributes) === JSON.stringify({})) return sayWoof(session, callback);
       return processAnswer(intentName, session, callback);
     case "LaunchIntent":
-      return sayWoof(session.user.userId, callback);
+      return sayWoof(session, callback);
     default:
       console.log(intentName);
       return invalidAnswer(intentName, session, callback);
@@ -79,7 +80,7 @@ function stop(intent, session, callback) {
 }
 
 function invalidAnswer(intent, session, callback) {
-  return sayWoof(session.user.userId, callback);
+  return sayWoof(session, callback);
 
   var sessionAttributes = session.attributes;
   sessionAttributes.intent = intent;
@@ -107,7 +108,7 @@ function processAnswer(input, session, callback) {
 
   switch (input) {
     case "AMAZON.YesIntent":
-      return sayWoof(session.user.userId, callback);
+      return sayWoof(session, callback);
     case "AMAZON.NoIntent":
       return stop(input, session, callback);
     default:
@@ -115,8 +116,8 @@ function processAnswer(input, session, callback) {
   }
 }
 
-function sayWoof(userId, callback) {
-  withthedog.sayWoof(AWS_URI, function(err, woof) {
+function sayWoof(session, callback) {
+  withthedog.sayWoof(AWS_URI, session, function(err, woof) {
     if (err) {
       var t = "There was a problem reaching Amazon. Please try again in a few moments";
       var speechlet = skillHelper.buildSpeechletResponse("", t, "", true, false);
